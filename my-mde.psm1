@@ -80,5 +80,22 @@ function Get-MyMDEStatus {
         Write-Host "    Data Center Location:" $myObj.GlobalLocation
         Write-Host "    Global Location:"$myObj.DataCenter
     }
+}
 
+<#
+ HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender
+#>
+Test-DefenderDisabled {
+    $disableKey = Get-ItemProperty -Property "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -ErrorAction SilentlyContinue
+    if($null -ne $disableKey){
+        if($disableKey.DisableAntiSpyware) {
+            Write-Host "Defender is DISABLED via Registry Setting 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender' DisableAntiSpyware."
+        }
+        else {
+            Write-Host "Defener is NOT disabled in the registry."
+        }
+    }
+    else {
+        Write-Host "Defener is NOT disabled in the registry."
+    }
 }
